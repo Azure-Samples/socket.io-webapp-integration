@@ -1,57 +1,85 @@
-# Project Name
+---
+id: Whiteboard
+title: Whiteboard
+description: A real-time collaboration live demo using Web PubSub for Socket.IO
+slug: /whiteboard
+hide_table_of_contents: true
+preview_image_name: Whiteboard
+---
 
-(short, 1-3 sentenced, description of the project)
+# Whiteboard: Real-Time Collaboration using Web PubSub for Socket.IO
 
-## Features
+This is a sample project to demonstrate how to build a web application for real-time collaboration using Azure, Socket.IO and other related technologies. This sample application includes the following features:
 
-This project framework provides the following features:
+* A whiteboard that anyone can paint on and others can see you painting in real-time
+* Painting features:
+  1. Basic paint tools (freehand, line, rectangle, circle, ellipse), color and stroke thickness
+  2. Upload a background image
+  3. Pan and zoom canvas
+  4. Undo and redo
+  5. Touch support for mobile devices
+* Real-time chat
 
-* Feature 1
-* Feature 2
-* ...
+This application is based on the following technologies:
 
-## Getting Started
+* For frontend: HTML5/javascript, Socket.IO client, bootstrap and vue.js
+* For backend: Socket.IO server + express.js
+* For real-time communication: Web PubSub for Socket.IO
 
-### Prerequisites
+## Build and run locally
 
-(ideally very short, if any)
+1. Build
+   ```bash
+   npm install
+   npm run build
+   ```
 
-- OS
-- Library version
-- ...
+2. Run
 
-### Installation
+   ```bash
+   npm start "<azure-web-pubsub-connection-string>"
+   ```
 
-(ideally very short)
+   You can also set connection string as an environment variable:
 
-- npm install [package name]
-- mvn install
-- ...
+   Linux:
 
-### Quickstart
-(Add steps to get up and running quickly)
+   ```bash
+   export Web_PubSub_ConnectionString="<connection_string>"
+   npm start
+   ```
 
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
+   Windows:
 
+   ```cmd
+   SET Web_PubSub_ConnectionString=<connection_string>
+   npm start
+   ```
 
-## Demo
+Now open http://localhost:8080 in your browser to use the whiteboard.
 
-A demo app is included to show how to use the project.
+## Deploy to Azure
 
-To run the demo, follow these steps:
+To deploy the application to Azure Web App, first package it into a zip file:
 
-(Add steps to start up the demo)
+```
+npm install
+npm run build
+zip -r app.zip *
+```
 
-1.
-2.
-3.
+Then use the following command to deploy it to Azure Web App:
 
-## Resources
+```
+az webapp deployment source config-zip --src app.zip -n <app-name> -g <resource-group-name>
+```
 
-(Any additional resources or related projects)
+Set Azure Web PubSub connection string in the application settings. You can do it through portal or using Azure CLI:
+```
+az webapp config appsettings set --resource-group <resource-group-name> --name <app-name> \
+   --setting Web_PubSub_ConnectionString="<connection-string>"
+```
 
-- Link to supporting information
-- Link to similar sample
-- ...
+Also update corresponding URL template in settings tab in Azure portal.
+
+Now your whiteboard is running in Azure at `https://<app-name>.azurewebsites.net`. Enjoy!
