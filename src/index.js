@@ -109,7 +109,7 @@ async function initialize() {
     diagram: diagram
   };
 
-  let negotiate = await fetch('/socket.io/negotiate');
+  let negotiate = await fetch('/negotiate');
   let negotiateJson = await negotiate.json();
 
   const socket = io(negotiateJson.endpoint, {
@@ -124,7 +124,7 @@ async function initialize() {
   });
 
   socket.io.on('reconnect_attempt', async () => {
-    let negotiate = await fetch('/socket.io/negotiate');
+    let negotiate = await fetch('/negotiate');
     let negotiateJson = await negotiate.json();
     socket.io.opts.query['access_token'] = negotiateJson.token;
   });
