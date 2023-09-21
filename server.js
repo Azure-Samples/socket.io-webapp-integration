@@ -3,16 +3,13 @@ const fileUpload = require('express-fileupload');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const { useAzureSocketIO } = require('@azure/web-pubsub-socket.io');
+const azure = require('@azure/web-pubsub-socket.io');
 
 const hubName = 'sample_draw';
 
-useAzureSocketIO(io, {
+azure.useAzureSocketIO(io, {
   hub: hubName,
-  connectionString: process.argv[2] || process.env.Web_PubSub_ConnectionString,
-  configureNegotiateOptions: async (req) => {
-    return {};
-  }
+  connectionString: process.argv[2] || process.env.Web_PubSub_ConnectionString
 });
 
 let diagram = {
@@ -85,7 +82,8 @@ app
       res.type(diagram.background.contentType);
       res.send(diagram.background.data);
     } else res.status(404).end();
-  });
+  })
+  .get('/negotiate', azure.negotiate(io));
 
 app.use(express.static('dist'));
-io.httpServer.listen(8080, () => console.log('app started')); 
+io.httpServer.listen(8080, () => console.log('app started. Open in http://localhost:8080')); 
